@@ -38,7 +38,7 @@ export const App: React.FC = () => {
         })
       );
       try {
-        const { data } = await API.datasets143VersionsLatestData570Get(1, 5);
+        const { data } = await API.datasets143VersionsLatestData570Get(1, 10);
         console.log(data);
       } catch {
         setErrorSnackbar('Fetch error, check console');

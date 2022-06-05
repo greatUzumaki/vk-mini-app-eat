@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'react-leaflet-markercluster/dist/styles.min.css';
 import { LatLngBoundsExpression, LatLngExpression, Icon } from 'leaflet';
 import MarkerIcon from '../../assets/icons/marker-icon.png';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
+import { DefaultApi, Configuration, Result } from '../../api';
+import { setErrorSnackbar } from '../../hooks';
 
 /** Координаты центра СПБ */
 const center: LatLngExpression = { lat: 59.938058, lng: 30.315079 };
@@ -21,6 +23,38 @@ const markerIcon = new Icon({
 });
 
 export const Map = () => {
+  const [markers, setMarkers] = useState<Result[]>([]);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const API = new DefaultApi(
+        new Configuration({
+          accessToken: import.meta.env.VITE_API_TOKEN,
+        })
+      );
+      try {
+        let i = 1;
+        const markersArr: Array<Result> = [];
+
+        while (true) {
+          const { data } = await API.datasets143VersionsLatestData570Get(
+            i,
+            100
+          );
+          i++;
+          data && markersArr.push(...(data.results as Array<Result>));
+          if (!data.next) break;
+        }
+
+        setMarkers(markersArr);
+      } catch {
+        setErrorSnackbar('Fetch error, check console');
+      }
+    };
+
+    fetch();
+  }, []);
+
   return (
     <MapContainer
       minZoom={12}
@@ -39,29 +73,30 @@ export const Map = () => {
         }`}
       ></TileLayer>
 
-      <MarkerClusterGroup
-        disableClusteringAtZoom={15}
-        spiderLegPolylineOptions={{ weight: 1.8, color: '#222', opacity: 0.8 }}
-      >
-        <Marker
-          riseOnHover
-          riseOffset={999}
-          position={center}
-          icon={markerIcon}
-        ></Marker>
-        <Marker
-          riseOnHover
-          riseOffset={999}
-          position={{ lat: 59.938058, lng: 30.315179 }}
-          icon={markerIcon}
-        ></Marker>
-        <Marker
-          riseOnHover
-          riseOffset={999}
-          position={{ lat: 59.938058, lng: 30.315279 }}
-          icon={markerIcon}
-        ></Marker>
-      </MarkerClusterGroup>
+      {markers.length === 0 ? (
+        <p>Загрузка..</p>
+      ) : (
+        <MarkerClusterGroup
+          disableClusteringAtZoom={15}
+          spiderLegPolylineOptions={{
+            weight: 1.8,
+            color: '#222',
+            opacity: 0.8,
+          }}
+        >
+          {markers.map((marker) => {
+            return (
+              <Marker
+                key={marker.oid}
+                riseOnHover
+                riseOffset={999}
+                position={marker.coord as LatLngExpression}
+                icon={markerIcon}
+              ></Marker>
+            );
+          })}
+        </MarkerClusterGroup>
+      )}
     </MapContainer>
   );
 };
