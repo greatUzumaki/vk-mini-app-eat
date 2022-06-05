@@ -27,7 +27,7 @@ export const Profile: React.FC<PanelProps> = ({ nav }: PanelProps) => {
 
   return (
     <Panel nav={nav}>
-      <PanelHeader>Карта</PanelHeader>
+      <PanelHeader>Профиль</PanelHeader>
       <Group>
         <SimpleCell
           before={<Avatar size={72} src={vkUser.photo_200} />}

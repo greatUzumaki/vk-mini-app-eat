@@ -14,6 +14,8 @@ import { useSetAtomState } from '@mntm/precoil';
 import { vkUserAtom } from './store';
 import bridge, { UserInfo } from '@vkontakte/vk-bridge';
 import './index.css';
+import { Configuration, DefaultApi } from './api';
+import { setErrorSnackbar } from './hooks';
 
 export const App: React.FC = () => {
   const platform: PlatformType = getPlatform();
@@ -26,6 +28,24 @@ export const App: React.FC = () => {
     };
 
     load();
+  }, []);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const API = new DefaultApi(
+        new Configuration({
+          accessToken: import.meta.env.VITE_API_TOKEN,
+        })
+      );
+      try {
+        const { data } = await API.datasets143VersionsLatestData570Get(1, 5);
+        console.log(data);
+      } catch {
+        setErrorSnackbar('Fetch error, check console');
+      }
+    };
+
+    fetch();
   }, []);
 
   return (

@@ -7,9 +7,11 @@
     "start": "vite",
     "build": "cross-env GENERATE_SOURCEMAP=false vite build",
     "predeploy": "npm run build",
-    "deploy": "vk-miniapps-deploy"
+    "deploy": "vk-miniapps-deploy",
+    "generate-code": "openapi-generator-cli generate -g typescript-axios -i https://static.petersburg.ru/egs-prod/service_api_version_documentation/d9c3b866-7c0d-4ea6-8d5a-19ef38c6b96d.json -o ./src/api"
   },
   "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.5.1",
     "@types/leaflet": "^1.7.10",
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
@@ -33,6 +35,7 @@
     "@vkontakte/icons": "^1.129.0",
     "@vkontakte/vk-bridge": "^2.4.8",
     "@vkontakte/vkui": "^4.17.0",
+    "axios": "^0.27.2",
     "eruda": "^2.4.1",
     "eruda-code": "^2.0.0",
     "eruda-dom": "^2.0.0",
