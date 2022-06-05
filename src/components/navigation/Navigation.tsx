@@ -1,32 +1,28 @@
-import React, { ReactNode } from 'react'
+import { Epic, Structure } from '@cteamdev/router';
 import {
   PanelHeader,
   SplitCol,
   SplitLayout,
   useAdaptivity,
-  ViewWidth
-} from '@vkontakte/vkui'
-import { NavigationMenu } from './NavigationMenu'
-import { Icon28InfoOutline, Icon28UserCircleOutline } from '@vkontakte/icons'
-import { NavigationTabbar } from './NavigationTabbar'
-import { Modals } from '../../modals'
-import { NavigationItem } from '../../types'
-import { CustomSnackbar } from '../snackbar/CustomSnackbar'
-import { Structure, Epic } from '@cteamdev/router'
-import { Popouts } from '../../popouts'
-
-const items: NavigationItem[] = [
-  { to: '/', text: 'Главная', icon: <Icon28UserCircleOutline /> },
-  { to: '/info', text: 'Инфо', icon: <Icon28InfoOutline /> }
-]
+  ViewWidth,
+} from '@vkontakte/vkui';
+import React, { ReactNode } from 'react';
+import { Modals } from '../../modals';
+import { Popouts } from '../../popouts';
+import { CustomSnackbar } from '../snackbar/CustomSnackbar';
+import { allPages } from './All-pages';
+import { NavigationMenu } from './NavigationMenu';
+import { NavigationTabbar } from './NavigationTabbar';
 
 type NavigationProps = {
-  children: ReactNode
-}
+  children: ReactNode;
+};
 
-export const Navigation: React.FC<NavigationProps> = ({ children }: NavigationProps) => {
-  const { viewWidth } = useAdaptivity()
-  const isDesktop: boolean = (viewWidth ?? 0) >= ViewWidth.SMALL_TABLET
+export const Navigation: React.FC<NavigationProps> = ({
+  children,
+}: NavigationProps) => {
+  const { viewWidth } = useAdaptivity();
+  const isDesktop: boolean = (viewWidth ?? 0) >= ViewWidth.SMALL_TABLET;
 
   return (
     <Structure>
@@ -41,13 +37,13 @@ export const Navigation: React.FC<NavigationProps> = ({ children }: NavigationPr
           width={isDesktop ? '550px' : '100%'}
           maxWidth={isDesktop ? '550px' : '100%'}
         >
-          <Epic tabbar={!isDesktop && <NavigationTabbar items={items} />}>
+          <Epic tabbar={!isDesktop && <NavigationTabbar items={allPages} />}>
             {children}
           </Epic>
           <CustomSnackbar isDesktop={isDesktop} />
         </SplitCol>
-        {isDesktop && <NavigationMenu items={items} />}
+        {isDesktop && <NavigationMenu items={allPages} />}
       </SplitLayout>
     </Structure>
-  )
-}
+  );
+};
