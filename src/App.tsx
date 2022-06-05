@@ -11,15 +11,16 @@ import { Home, Info, Persik, Profile } from './pages';
 import { Navigation } from './components/navigation';
 import { getPlatform } from './utils';
 import { useSetAtomState } from '@mntm/precoil';
-import { vkUserAtom } from './store';
+import { markersAtom, vkUserAtom } from './store';
 import bridge, { UserInfo } from '@vkontakte/vk-bridge';
 import './index.css';
-import { Configuration, DefaultApi } from './api';
+import { Configuration, DefaultApi, Result } from './api';
 import { setErrorSnackbar } from './hooks';
 
 export const App: React.FC = () => {
   const platform: PlatformType = getPlatform();
   const setVkUser = useSetAtomState(vkUserAtom);
+  const setMarkers = useSetAtomState(markersAtom);
 
   useEffect(() => {
     const load = async () => {
@@ -38,8 +39,20 @@ export const App: React.FC = () => {
         })
       );
       try {
-        const { data } = await API.datasets143VersionsLatestData570Get(1, 10);
-        console.log(data);
+        let i = 1;
+        const markersArr: Array<Result> = [];
+
+        while (true) {
+          const { data } = await API.datasets143VersionsLatestData570Get(
+            i,
+            100
+          );
+          i++;
+          data && markersArr.push(...(data.results as Array<Result>));
+          if (!data.next) break;
+        }
+
+        setMarkers(markersArr);
       } catch {
         setErrorSnackbar('Fetch error, check console');
       }
