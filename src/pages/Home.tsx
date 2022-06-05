@@ -1,5 +1,12 @@
-import React from 'react'
-import { Avatar, Group, Panel, PanelHeader, PanelProps, SimpleCell } from '@vkontakte/vkui'
+import React from 'react';
+import {
+  Avatar,
+  Group,
+  Panel,
+  PanelHeader,
+  PanelProps,
+  SimpleCell,
+} from '@vkontakte/vkui';
 import {
   Icon28BillheadOutline,
   Icon28ChevronRightOutline,
@@ -7,25 +14,25 @@ import {
   Icon28CancelCircleOutline,
   Icon28PawOutline,
   Icon28WarningTriangleOutline,
-  Icon28ArticleOutline
-} from '@vkontakte/icons'
-import { UserInfo } from '@vkontakte/vk-bridge'
-import { useAtomValue } from '@mntm/precoil'
-import { vkUserAtom } from '../store'
-import { setDoneSnackbar, setErrorSnackbar } from '../hooks'
-import { push } from '@cteamdev/router'
-
+  Icon28ArticleOutline,
+} from '@vkontakte/icons';
+import { UserInfo } from '@vkontakte/vk-bridge';
+import { useAtomValue } from '@mntm/precoil';
+import { vkUserAtom } from '../store';
+import { setDoneSnackbar, setErrorSnackbar } from '../hooks';
+import { push } from '@cteamdev/router';
+import { Map } from '../components/map/MapContainer';
 export const Home: React.FC<PanelProps> = ({ nav }: PanelProps) => {
-  const vkUser: UserInfo = useAtomValue(vkUserAtom)
+  const vkUser: UserInfo = useAtomValue(vkUserAtom);
 
   return (
     <Panel nav={nav}>
-      <PanelHeader>Главная</PanelHeader>
+      <PanelHeader>{import.meta.env.VITE_APP_TITLE}</PanelHeader>
       <Group>
+        <Map />
+
         <SimpleCell
-          before={
-            <Avatar size={72} src={vkUser.photo_200} />
-          }
+          before={<Avatar size={72} src={vkUser.photo_200} />}
           description='Это же ты!'
         >
           {vkUser.first_name} {vkUser.last_name}
@@ -78,5 +85,5 @@ export const Home: React.FC<PanelProps> = ({ nav }: PanelProps) => {
         </SimpleCell>
       </Group>
     </Panel>
-  )
-}
+  );
+};

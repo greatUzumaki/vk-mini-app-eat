@@ -15,6 +15,7 @@ export const CustomSnackbar: React.FC<CustomSnackbarProps> = ({ isDesktop }: Cus
   return snackbar
     ? (
       <Snackbar
+        duration={5000}
         onClose={() => setSnackbar(undefined)}
         before={snackbar?.type === SnackbarType.DONE
           ? <Icon20CheckCircleFillGreen width={24} height={24} />
