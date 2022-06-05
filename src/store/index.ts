@@ -8,3 +8,9 @@ export const vkUserAtom = atom<UserInfo>({} as UserInfo, 'vkUser');
 export const snackbarAtom = atom<Snackbar | undefined>(undefined, 'snackbar');
 
 export const markersAtom = atom<Result[]>([], 'markers');
+
+interface IFoodInfo extends Result {
+  test?: string;
+}
+
+export const foodInfo = atom<IFoodInfo>({ name: 'test' }, 'foodInfo');

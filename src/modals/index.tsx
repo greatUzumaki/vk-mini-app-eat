@@ -1,11 +1,13 @@
-import React from 'react'
-import { Modal } from './Modal'
-import { ModalRoot } from '@cteamdev/router'
+import { ModalRoot } from '@cteamdev/router';
+import React from 'react';
+import { Modal as CustomModalCard } from './ModalCard';
+import { Modal as CustomModalPage } from './ModalPage';
 
 export const Modals = () => {
   return (
     <ModalRoot>
-      <Modal nav='modal' />
+      <CustomModalCard nav='modal' />
+      <CustomModalPage nav='modal-page' />
     </ModalRoot>
-  )
-}
+  );
+};

@@ -1,13 +1,14 @@
-import { useAtomValue } from '@mntm/precoil';
+import { push } from '@cteamdev/router';
+import { useAtomValue, useSetAtomState } from '@mntm/precoil';
 import { ScreenSpinner } from '@vkontakte/vkui';
 import { Icon, LatLngBoundsExpression, LatLngExpression } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import React from 'react';
-import { MapContainer, Marker, TileLayer } from 'react-leaflet';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import 'react-leaflet-markercluster/dist/styles.min.css';
 import MarkerIcon from '../../assets/icons/marker-icon.png';
-import { markersAtom } from '../../store';
+import { foodInfo, markersAtom } from '../../store';
 
 /** Координаты центра СПБ */
 const center: LatLngExpression = { lat: 59.938058, lng: 30.315079 };
@@ -21,9 +22,11 @@ const maxBoundsCoords: LatLngBoundsExpression = [
 const markerIcon = new Icon({
   iconUrl: MarkerIcon,
   iconSize: [42, 42],
+  popupAnchor: [0, -20],
 });
 
 export const Map = () => {
+  const setFoodInfo = useSetAtomState(foodInfo);
   const markers = useAtomValue(markersAtom);
 
   return (
@@ -46,14 +49,13 @@ export const Map = () => {
         zoom={11}
         center={center}
         maxBoundsViscosity={1.0}
-        inertiaDeceleration={5000}
-        // worldCopyJump={true}
         attributionControl={false}
       >
         <TileLayer
           url={`https://tile.jawg.io/jawg-streets/{z}/{x}/{y}{r}.png?access-token=${
             import.meta.env.VITE_MAP_TOKEN
           }`}
+          keepBuffer={10}
         ></TileLayer>
 
         <MarkerClusterGroup
@@ -73,7 +75,15 @@ export const Map = () => {
                 riseOffset={999}
                 position={marker.coord as LatLngExpression}
                 icon={markerIcon}
-              ></Marker>
+                eventHandlers={{
+                  click: () => {
+                    setFoodInfo(marker);
+                    push('/?modal=modal-page');
+                  },
+                }}
+              >
+                <Popup>{marker.name}</Popup>
+              </Marker>
             );
           })}
         </MarkerClusterGroup>

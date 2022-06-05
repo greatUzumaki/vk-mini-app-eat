@@ -137,7 +137,7 @@ export interface Result {
    * @type {Array<number>}
    * @memberof Result
    */
-  coord: Array<number>;
+  coord?: Array<number>;
 }
 
 /**

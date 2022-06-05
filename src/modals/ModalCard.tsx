@@ -1,7 +1,7 @@
-import React from 'react'
-import { Button, ModalCard, ModalCardProps } from '@vkontakte/vkui'
-import { Icon56GhostOutline } from '@vkontakte/icons'
-import { back } from '@cteamdev/router'
+import React from 'react';
+import { Button, ModalCard, ModalCardProps } from '@vkontakte/vkui';
+import { Icon56GhostOutline } from '@vkontakte/icons';
+import { back } from '@cteamdev/router';
 
 export const Modal: React.FC<ModalCardProps> = ({ nav }: ModalCardProps) => {
   return (
@@ -17,5 +17,5 @@ export const Modal: React.FC<ModalCardProps> = ({ nav }: ModalCardProps) => {
         </Button>
       }
     />
-  )
-}
+  );
+};
