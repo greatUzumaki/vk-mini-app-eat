@@ -64,7 +64,7 @@ export const App: React.FC = () => {
   return (
     <ConfigProvider platform={platform}>
       <AdaptivityProvider>
-        <AppRoot>
+        <AppRoot style={{ overflow: 'hidden' }}>
           <Navigation>
             <View nav='/'>
               <Home nav='/' />
