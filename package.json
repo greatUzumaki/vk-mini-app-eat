@@ -32,6 +32,7 @@
   "dependencies": {
     "@cteamdev/router": "^0.2.6",
     "@mntm/precoil": "^4.0.4",
+    "@types/react-leaflet-markercluster": "^3.0.0",
     "@vkontakte/icons": "^1.129.0",
     "@vkontakte/vk-bridge": "^2.4.8",
     "@vkontakte/vkui": "^4.17.0",
@@ -40,9 +41,11 @@
     "eruda-code": "^2.0.0",
     "eruda-dom": "^2.0.0",
     "leaflet": "^1.8.0",
+    "leaflet.markercluster": "^1.5.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-leaflet": "^4.0.0"
+    "react-leaflet": "^3.2.5",
+    "react-leaflet-markercluster": "^3.0.0-rc1"
   },
   "browserslist": {
     "production": [
