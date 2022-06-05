@@ -27,7 +27,7 @@ export const Home: React.FC<PanelProps> = ({ nav }: PanelProps) => {
 
   return (
     <Panel nav={nav}>
-      <PanelHeader>{import.meta.env.VITE_APP_TITLE}</PanelHeader>
+      <PanelHeader>Карта</PanelHeader>
       <Group>
         <Map />
 
