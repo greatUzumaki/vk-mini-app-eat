@@ -1,11 +1,13 @@
+/* Стили leaflet */
 .leaflet-control-attribution svg {
   display: none !important;
 }
 
-.vkuiModalPage--desktop .vkuiModalPage__in-wrap {
-  width: 100%;
+.leaflet-top {
+  top: 50px;
 }
 
+/* Стили маркеров */
 @keyframes fade {
   from {
     opacity: 0;

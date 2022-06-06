@@ -70,7 +70,7 @@ export const Map = () => {
   const [zoomLevel, setZoomLevel] = useState(5);
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'relative', zIndex: -1 }}>
       {loading && (
         <ScreenSpinner
           style={{
@@ -102,6 +102,7 @@ export const Map = () => {
         <MapEventHandler setZoomLevel={setZoomLevel} />
 
         <MarkerClusterGroup
+          maxClusterRadius={50}
           polygonOptions={{ color: 'orange' }}
           disableClusteringAtZoom={15}
           spiderLegPolylineOptions={{
