@@ -131,7 +131,7 @@ export const Map = () => {
                   },
                 }}
               >
-                {zoomLevel > 16 && (
+                {(zoomLevel > 16 || (map?.coords && map?.zoom > 16)) && (
                   <Tooltip className='fade' permanent>
                     {marker.name}
                   </Tooltip>
