@@ -26,24 +26,42 @@ export const FoodInfo: React.FC<PanelProps> = ({ nav }: PanelProps) => {
         {info.name}
       </PanelHeader>
       <Group>
-        <Cell multiline before={<Icon28LocationMapOutline />}>
+        <Cell
+          href={`http://maps.google.com/?q=${info.address_manual}`}
+          target='_blank'
+          multiline
+          before={<Icon28LocationMapOutline />}
+        >
           {info.address_manual}
         </Cell>
 
         {info.phone && (
-          <Cell multiline before={<Icon28PhoneOutline />}>
+          <Cell
+            multiline
+            href={`tel:${info.phone}`}
+            before={<Icon28PhoneOutline />}
+          >
             {info.phone}
           </Cell>
         )}
 
         {info.www && (
-          <Cell multiline before={<Icon28GlobeOutline />}>
+          <Cell
+            multiline
+            href={info.www.includes('http') ? info.www : 'http://' + info.www}
+            target='_blank'
+            before={<Icon28GlobeOutline />}
+          >
             {info.www}
           </Cell>
         )}
 
         {info.email && (
-          <Cell multiline before={<Icon28MailOutline />}>
+          <Cell
+            multiline
+            href={`mailto:${info.email}`}
+            before={<Icon28MailOutline />}
+          >
             {info.email}
           </Cell>
         )}

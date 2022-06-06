@@ -1,5 +1,5 @@
 import { push } from '@cteamdev/router';
-import { useAtomValue, useSetAtomState } from '@mntm/precoil';
+import { useAtomState, useAtomValue, useSetAtomState } from '@mntm/precoil';
 import { ScreenSpinner } from '@vkontakte/vkui';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -14,7 +14,7 @@ import {
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import 'react-leaflet-markercluster/dist/styles.min.css';
 import MarkerIcon from '../../assets/icons/marker-icon.png';
-import { fetching, foodInfo, markersAtom } from '../../store';
+import { fetching, foodInfo, mapInfo, markersAtom } from '../../store';
 
 /** Координаты центра СПБ */
 const center: L.LatLngExpression = { lat: 59.938058, lng: 30.315079 };
@@ -62,8 +62,11 @@ function MapEventHandler({
 
 export const Map = () => {
   const setFoodInfo = useSetAtomState(foodInfo);
+  const [map, setMapInfo] = useAtomState(mapInfo);
+
   const markers = useAtomValue(markersAtom);
   const loading = useAtomValue(fetching);
+
   const [zoomLevel, setZoomLevel] = useState(5);
 
   return (
@@ -84,8 +87,8 @@ export const Map = () => {
         minZoom={12}
         maxBounds={maxBoundsCoords}
         style={{ height: '100vh', width: '100%' }}
-        zoom={11}
-        center={center}
+        zoom={map?.zoom || 11}
+        center={map?.coords || center}
         maxBoundsViscosity={1.0}
         attributionControl={false}
       >
@@ -93,7 +96,7 @@ export const Map = () => {
           url={`https://tile.jawg.io/jawg-streets/{z}/{x}/{y}{r}.png?access-token=${
             import.meta.env.VITE_MAP_TOKEN
           }`}
-          keepBuffer={10}
+          keepBuffer={8}
         ></TileLayer>
 
         <MapEventHandler setZoomLevel={setZoomLevel} />
@@ -119,6 +122,10 @@ export const Map = () => {
                 eventHandlers={{
                   click: () => {
                     setFoodInfo(marker);
+                    setMapInfo({
+                      zoom: zoomLevel,
+                      coords: marker.coord as L.LatLngExpression,
+                    });
                     push('/foodinfo');
                   },
                 }}
