@@ -2,7 +2,6 @@ import { back } from '@cteamdev/router';
 import { useAtomValue } from '@mntm/precoil';
 import { Icon24Dismiss } from '@vkontakte/icons';
 import {
-  Div,
   Group,
   Header,
   IOS,
@@ -14,7 +13,6 @@ import {
   PanelHeaderButton,
   PanelHeaderClose,
   SimpleCell,
-  Text,
   usePlatform,
 } from '@vkontakte/vkui';
 import React from 'react';

@@ -1,34 +1,70 @@
 import { push } from '@cteamdev/router';
 import { useAtomValue, useSetAtomState } from '@mntm/precoil';
 import { ScreenSpinner } from '@vkontakte/vkui';
-import { Icon, LatLngBoundsExpression, LatLngExpression } from 'leaflet';
+import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import React from 'react';
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import React, { useState } from 'react';
+import {
+  MapContainer,
+  Marker,
+  TileLayer,
+  Tooltip,
+  useMapEvents,
+} from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import 'react-leaflet-markercluster/dist/styles.min.css';
 import MarkerIcon from '../../assets/icons/marker-icon.png';
 import { fetching, foodInfo, markersAtom } from '../../store';
 
 /** Координаты центра СПБ */
-const center: LatLngExpression = { lat: 59.938058, lng: 30.315079 };
+const center: L.LatLngExpression = { lat: 59.938058, lng: 30.315079 };
 
 /** Ограничения карты */
-const maxBoundsCoords: LatLngBoundsExpression = [
+const maxBoundsCoords: L.LatLngBoundsExpression = [
   [60.303665, 29.327367],
   [59.574302, 30.999731],
 ];
 
-const markerIcon = new Icon({
+const markerIcon = new L.Icon({
   iconUrl: MarkerIcon,
   iconSize: [42, 42],
-  popupAnchor: [0, -20],
+  className: 'fade',
+  tooltipAnchor: [20, 0],
 });
+
+const CustomClusterIcon = (cluster: L.MarkerCluster) => {
+  const markers = cluster.getAllChildMarkers();
+  const markersCount = markers.length;
+  const html = '<div class="circle">' + markersCount + '</div>';
+  return L.divIcon({
+    html: html,
+    className: 'mycluster',
+    iconSize: L.point(32, 32),
+  });
+};
+
+/**
+ * Хэндлер для зума, чтобы скрывать и показывать тултипы в зависимости от уровня зума
+ * */
+function MapEventHandler({
+  setZoomLevel,
+}: {
+  setZoomLevel: (zoomLevel: number) => void;
+}) {
+  const mapEvents = useMapEvents({
+    zoomend: () => {
+      setZoomLevel(mapEvents.getZoom());
+    },
+  });
+
+  return null;
+}
 
 export const Map = () => {
   const setFoodInfo = useSetAtomState(foodInfo);
   const markers = useAtomValue(markersAtom);
   const loading = useAtomValue(fetching);
+  const [zoomLevel, setZoomLevel] = useState(5);
 
   return (
     <div style={{ position: 'relative' }}>
@@ -44,6 +80,7 @@ export const Map = () => {
       )}
 
       <MapContainer
+        ref={(r) => r?.addEventListener('zoomend', () => alert('awd'))}
         minZoom={12}
         maxBounds={maxBoundsCoords}
         style={{ height: '100vh', width: '100%' }}
@@ -59,6 +96,8 @@ export const Map = () => {
           keepBuffer={10}
         ></TileLayer>
 
+        <MapEventHandler setZoomLevel={setZoomLevel} />
+
         <MarkerClusterGroup
           polygonOptions={{ color: 'orange' }}
           disableClusteringAtZoom={15}
@@ -67,6 +106,7 @@ export const Map = () => {
             color: '#222',
             opacity: 0.8,
           }}
+          iconCreateFunction={CustomClusterIcon}
         >
           {markers.map((marker) => {
             return (
@@ -74,7 +114,7 @@ export const Map = () => {
                 key={marker.oid}
                 riseOnHover
                 riseOffset={999}
-                position={marker.coord as LatLngExpression}
+                position={marker.coord as L.LatLngExpression}
                 icon={markerIcon}
                 eventHandlers={{
                   click: () => {
@@ -83,7 +123,11 @@ export const Map = () => {
                   },
                 }}
               >
-                <Popup>{marker.name}</Popup>
+                {zoomLevel > 17 && (
+                  <Tooltip className='fade' permanent>
+                    {marker.name}
+                  </Tooltip>
+                )}
               </Marker>
             );
           })}
