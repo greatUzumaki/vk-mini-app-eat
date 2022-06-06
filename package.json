@@ -32,7 +32,6 @@
   "dependencies": {
     "@cteamdev/router": "^0.2.6",
     "@mntm/precoil": "^4.0.4",
-    "@react-leaflet/core": "^2.0.0",
     "@types/react-leaflet-markercluster": "^3.0.0",
     "@vkontakte/icons": "^1.129.0",
     "@vkontakte/vk-bridge": "^2.4.8",
