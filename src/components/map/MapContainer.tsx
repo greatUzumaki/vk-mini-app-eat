@@ -119,11 +119,11 @@ export const Map = () => {
                 eventHandlers={{
                   click: () => {
                     setFoodInfo(marker);
-                    push('/?modal=modal-page');
+                    push('/foodinfo');
                   },
                 }}
               >
-                {zoomLevel > 17 && (
+                {zoomLevel > 16 && (
                   <Tooltip className='fade' permanent>
                     {marker.name}
                   </Tooltip>

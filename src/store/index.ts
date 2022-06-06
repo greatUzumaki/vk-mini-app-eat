@@ -13,6 +13,6 @@ interface IFoodInfo extends Result {
   test?: string;
 }
 
-export const foodInfo = atom<IFoodInfo>({ name: 'test' }, 'foodInfo');
+export const foodInfo = atom<IFoodInfo>({}, 'foodInfo');
 
 export const fetching = atom(false, 'fetching');

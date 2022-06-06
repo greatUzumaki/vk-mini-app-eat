@@ -7,7 +7,7 @@ import {
 } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import { View } from '@cteamdev/router';
-import { Home, Info, Persik, Profile } from './pages';
+import { FoodInfo, Home, Info, Persik, Profile } from './pages';
 import { Navigation } from './components/navigation';
 import { getPlatform } from './utils';
 import { useSetAtomState } from '@mntm/precoil';
@@ -72,6 +72,7 @@ export const App: React.FC = () => {
             <View nav='/'>
               <Home nav='/' />
               <Persik nav='/persik' />
+              <FoodInfo nav='/foodinfo' />
             </View>
             <View nav='/info'>
               <Info nav='/' />
