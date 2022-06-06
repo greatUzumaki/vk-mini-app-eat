@@ -11,7 +11,7 @@ import { Home, Info, Persik, Profile } from './pages';
 import { Navigation } from './components/navigation';
 import { getPlatform } from './utils';
 import { useSetAtomState } from '@mntm/precoil';
-import { markersAtom, vkUserAtom } from './store';
+import { fetching, markersAtom, vkUserAtom } from './store';
 import bridge, { UserInfo } from '@vkontakte/vk-bridge';
 import './index.css';
 import { Configuration, DefaultApi, Result } from './api';
@@ -21,6 +21,7 @@ export const App: React.FC = () => {
   const platform: PlatformType = getPlatform();
   const setVkUser = useSetAtomState(vkUserAtom);
   const setMarkers = useSetAtomState(markersAtom);
+  const setFetching = useSetAtomState(fetching);
 
   useEffect(() => {
     const load = async () => {
@@ -39,8 +40,8 @@ export const App: React.FC = () => {
         })
       );
       try {
+        setFetching(true);
         let i = 1;
-        const markersArr: Array<Result> = [];
 
         while (true) {
           const { data } = await API.datasets143VersionsLatestData570Get(
@@ -48,13 +49,15 @@ export const App: React.FC = () => {
             100
           );
           i++;
-          data && markersArr.push(...(data.results as Array<Result>));
+
+          data &&
+            setMarkers((old) => [...old, ...(data.results as Array<Result>)]);
           if (!data.next) break;
         }
-
-        setMarkers(markersArr);
       } catch {
         setErrorSnackbar('Fetch error, check console');
+      } finally {
+        setFetching(false);
       }
     };
 

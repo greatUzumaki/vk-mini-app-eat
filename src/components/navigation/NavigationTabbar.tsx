@@ -1,18 +1,20 @@
-import React from 'react'
-import { Tabbar, TabbarItem } from '@vkontakte/vkui'
-import { NavigationItem } from '../../types'
-import { replace, useCurrentState } from '@cteamdev/router'
+import React from 'react';
+import { Tabbar, TabbarItem } from '@vkontakte/vkui';
+import { NavigationItem } from '../../types';
+import { replace, useCurrentState } from '@cteamdev/router';
 
 type NavigationTabbarProps = {
-  items: NavigationItem[]
-}
+  items: NavigationItem[];
+};
 
-export const NavigationTabbar: React.FC<NavigationTabbarProps> = ({ items }: NavigationTabbarProps) => {
-  const { view } = useCurrentState()
+export const NavigationTabbar: React.FC<NavigationTabbarProps> = ({
+  items,
+}: NavigationTabbarProps) => {
+  const { view } = useCurrentState();
 
   return (
     <Tabbar>
-      {items.map(item =>
+      {items.map((item) => (
         <TabbarItem
           key={item.to}
           selected={item.to === view}
@@ -21,7 +23,7 @@ export const NavigationTabbar: React.FC<NavigationTabbarProps> = ({ items }: Nav
         >
           {item.icon}
         </TabbarItem>
-      )}
+      ))}
     </Tabbar>
-  )
-}
+  );
+};

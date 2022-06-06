@@ -1,30 +1,46 @@
 import { back } from '@cteamdev/router';
 import { useAtomValue } from '@mntm/precoil';
+import { Icon24Dismiss } from '@vkontakte/icons';
 import {
+  Div,
   Group,
   Header,
+  IOS,
   Link,
   ModalCardProps,
   ModalPage,
   ModalPageHeader,
   ModalPageProps,
+  PanelHeaderButton,
   PanelHeaderClose,
   SimpleCell,
   Text,
+  usePlatform,
 } from '@vkontakte/vkui';
 import React from 'react';
 import { foodInfo } from '../store';
 
 export const Modal: React.FC<ModalCardProps> = ({ nav }: ModalPageProps) => {
   const info = useAtomValue(foodInfo);
+  const platform = usePlatform();
 
   return (
     <ModalPage
+      id={nav}
       nav={nav}
       settlingHeight={100}
       onClose={back}
       header={
-        <ModalPageHeader left={<PanelHeaderClose onClick={back} />}>
+        <ModalPageHeader
+          left={platform !== IOS && <PanelHeaderClose onClick={back} />}
+          right={
+            platform === IOS && (
+              <PanelHeaderButton onClick={back}>
+                <Icon24Dismiss />
+              </PanelHeaderButton>
+            )
+          }
+        >
           {info.name}
         </ModalPageHeader>
       }

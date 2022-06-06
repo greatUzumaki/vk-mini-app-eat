@@ -31,7 +31,7 @@ export const Profile: React.FC<PanelProps> = ({ nav }: PanelProps) => {
       <Group>
         <SimpleCell
           before={<Avatar size={72} src={vkUser.photo_200} />}
-          description='Это же ты!'
+          description='Хочет вкусно поесть'
         >
           {vkUser.first_name} {vkUser.last_name}
         </SimpleCell>

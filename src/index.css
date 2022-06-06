@@ -1,3 +1,7 @@
 .leaflet-control-attribution svg {
   display: none !important;
 }
+
+.vkuiModalPage--desktop .vkuiModalPage__in-wrap {
+  width: 100%;
+}

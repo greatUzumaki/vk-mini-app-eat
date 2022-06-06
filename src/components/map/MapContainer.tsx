@@ -8,7 +8,7 @@ import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import 'react-leaflet-markercluster/dist/styles.min.css';
 import MarkerIcon from '../../assets/icons/marker-icon.png';
-import { foodInfo, markersAtom } from '../../store';
+import { fetching, foodInfo, markersAtom } from '../../store';
 
 /** Координаты центра СПБ */
 const center: LatLngExpression = { lat: 59.938058, lng: 30.315079 };
@@ -28,10 +28,11 @@ const markerIcon = new Icon({
 export const Map = () => {
   const setFoodInfo = useSetAtomState(foodInfo);
   const markers = useAtomValue(markersAtom);
+  const loading = useAtomValue(fetching);
 
   return (
     <div style={{ position: 'relative' }}>
-      {markers.length === 0 && (
+      {loading && (
         <ScreenSpinner
           style={{
             position: 'absolute',
