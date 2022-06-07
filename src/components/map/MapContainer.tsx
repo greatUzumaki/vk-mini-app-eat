@@ -83,7 +83,6 @@ export const Map = () => {
       )}
 
       <MapContainer
-        ref={(r) => r?.addEventListener('zoomend', () => alert('awd'))}
         minZoom={12}
         maxBounds={maxBoundsCoords}
         style={{ height: '100vh', width: '100%' }}
@@ -131,7 +130,7 @@ export const Map = () => {
                   },
                 }}
               >
-                {(zoomLevel > 16 || (map?.coords && map?.zoom > 16)) && (
+                {zoomLevel > 16 && (
                   <Tooltip className='fade' permanent>
                     {marker.name}
                   </Tooltip>
