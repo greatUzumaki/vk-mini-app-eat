@@ -60,6 +60,7 @@ function MapEventHandler({
   return null;
 }
 
+// Основной компонент карты
 export const Map = () => {
   const setFoodInfo = useSetAtomState(foodInfo);
   const [map, setMapInfo] = useAtomState(mapInfo);
@@ -130,11 +131,7 @@ export const Map = () => {
                   },
                 }}
               >
-                {zoomLevel > 16 && (
-                  <Tooltip className='fade' permanent>
-                    {marker.name}
-                  </Tooltip>
-                )}
+                <Tooltip className='fade'>{marker.name}</Tooltip>
               </Marker>
             );
           })}
