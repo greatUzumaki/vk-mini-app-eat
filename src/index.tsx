@@ -3,6 +3,8 @@ import axios from 'axios';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { createWebStoragePersistor } from 'react-query/createWebStoragePersistor-experimental';
+import { persistQueryClient } from 'react-query/persistQueryClient-experimental';
 import { RetryValue } from 'react-query/types/core/retryer';
 import { App } from './App';
 import './bridge';
@@ -30,8 +32,18 @@ const queryClient = new QueryClient({
     },
     queries: {
       retry: retryCondition,
+      cacheTime: 1000 * 60 * 60 * 24, // 24 часа
     },
   },
+});
+
+const localStoragePersistor = createWebStoragePersistor({
+  storage: window.localStorage,
+});
+
+persistQueryClient({
+  queryClient,
+  persistor: localStoragePersistor,
 });
 
 ReactDOM.render(

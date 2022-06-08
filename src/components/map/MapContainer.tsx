@@ -81,7 +81,6 @@ export const Map = () => {
     useInfiniteQuery('getFoodData', fetchMarkers, {
       getNextPageParam: (lastPage) => lastPage.nextPage,
       staleTime: 60 * 1000 * 5, // Данные не устаревают 5 минут (чтобы отключить агрессивную загрузку)
-      cacheTime: 5000,
     });
 
   if (error) setErrorSnackbar('Ошибка получения данных');
