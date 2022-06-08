@@ -73,7 +73,7 @@ const fetchMarkers = async ({ pageParam = 1 }) => {
   const res = await API.datasets143VersionsLatestData570Get(pageParam, 100);
   return {
     data: res.data.results,
-    nextPage: pageParam + 1,
+    nextPage: res.data.next ? pageParam + 1 : false,
     hasNextPage: res.data.next,
   };
 };
@@ -85,21 +85,19 @@ export const Map = () => {
 
   const [zoomLevel, setZoomLevel] = useState(5);
 
-  const { data, error, isLoading, fetchNextPage } = useInfiniteQuery(
-    'getData',
-    fetchMarkers,
-    {
-      getNextPageParam: (lastPage) => {
-        if (lastPage.hasNextPage) return lastPage.nextPage;
-      },
-    }
-  );
+  const { data, error, isFetching, fetchNextPage, hasNextPage } =
+    useInfiniteQuery('getData', fetchMarkers, {
+      getNextPageParam: (lastPage) => lastPage.nextPage,
+      staleTime: 60 * 1000 * 5, // Данные не устаревают 5 минут (чтобы отключить агрессивную загрузку)
+    });
 
   if (error) setErrorSnackbar('Ошибка получения данных');
 
+  if (hasNextPage) fetchNextPage();
+
   return (
     <div style={{ position: 'relative', zIndex: -1 }}>
-      {isLoading && (
+      {(isFetching || hasNextPage) && (
         <ScreenSpinner
           style={{
             position: 'absolute',
@@ -157,8 +155,7 @@ export const Map = () => {
                           zoom: zoomLevel,
                           coords: marker.coord as L.LatLngExpression,
                         });
-                        fetchNextPage();
-                        // push('/foodinfo');
+                        push('/foodinfo');
                       },
                     }}
                   >
