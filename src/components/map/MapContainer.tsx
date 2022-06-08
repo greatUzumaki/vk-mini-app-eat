@@ -1,5 +1,5 @@
 import { push } from '@cteamdev/router';
-import { useAtomState, useAtomValue, useSetAtomState } from '@mntm/precoil';
+import { useAtomState, useSetAtomState } from '@mntm/precoil';
 import { ScreenSpinner } from '@vkontakte/vkui';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -13,8 +13,11 @@ import {
 } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import 'react-leaflet-markercluster/dist/styles.min.css';
+import { useQuery } from 'react-query';
+import { Configuration, DefaultApi } from '../../api';
 import MarkerIcon from '../../assets/icons/marker-icon.png';
-import { fetching, foodInfo, mapInfo, markersAtom } from '../../store';
+import { setErrorSnackbar } from '../../hooks';
+import { foodInfo, mapInfo } from '../../store';
 
 /** Координаты центра СПБ */
 const center: L.LatLngExpression = { lat: 59.938058, lng: 30.315079 };
@@ -28,6 +31,7 @@ const maxBoundsCoords: L.LatLngBoundsExpression = [
 const markerIcon = new L.Icon({
   iconUrl: MarkerIcon,
   iconSize: [42, 42],
+  iconAnchor: [20, 30],
   className: 'fade',
   tooltipAnchor: [20, 0],
 });
@@ -60,19 +64,32 @@ function MapEventHandler({
   return null;
 }
 
+/** Получени данных апишкой Цифрового Петербурга  */
+const fetchMarkers = async () => {
+  const API = new DefaultApi(
+    new Configuration({ accessToken: import.meta.env.VITE_API_TOKEN })
+  );
+
+  let i = 1;
+  const res = await API.datasets143VersionsLatestData570Get(i, 100);
+  i++;
+  return res.data;
+};
+
 // Основной компонент карты
 export const Map = () => {
   const setFoodInfo = useSetAtomState(foodInfo);
   const [map, setMapInfo] = useAtomState(mapInfo);
 
-  const markers = useAtomValue(markersAtom);
-  const loading = useAtomValue(fetching);
-
   const [zoomLevel, setZoomLevel] = useState(5);
+
+  const { data, error, isLoading } = useQuery('getData', fetchMarkers);
+
+  if (error) setErrorSnackbar('Ошибка получения данных');
 
   return (
     <div style={{ position: 'relative', zIndex: -1 }}>
-      {loading && (
+      {isLoading && (
         <ScreenSpinner
           style={{
             position: 'absolute',
@@ -112,29 +129,30 @@ export const Map = () => {
           }}
           iconCreateFunction={CustomClusterIcon}
         >
-          {markers.map((marker) => {
-            return (
-              <Marker
-                key={marker.oid}
-                riseOnHover
-                riseOffset={999}
-                position={marker.coord as L.LatLngExpression}
-                icon={markerIcon}
-                eventHandlers={{
-                  click: () => {
-                    setFoodInfo(marker);
-                    setMapInfo({
-                      zoom: zoomLevel,
-                      coords: marker.coord as L.LatLngExpression,
-                    });
-                    push('/foodinfo');
-                  },
-                }}
-              >
-                <Tooltip className='fade'>{marker.name}</Tooltip>
-              </Marker>
-            );
-          })}
+          {data?.results &&
+            data.results.map((marker) => {
+              return (
+                <Marker
+                  key={marker.oid}
+                  riseOnHover
+                  riseOffset={999}
+                  position={marker.coord as L.LatLngExpression}
+                  icon={markerIcon}
+                  eventHandlers={{
+                    click: () => {
+                      setFoodInfo(marker);
+                      setMapInfo({
+                        zoom: zoomLevel,
+                        coords: marker.coord as L.LatLngExpression,
+                      });
+                      push('/foodinfo');
+                    },
+                  }}
+                >
+                  <Tooltip className='fade'>{marker.name}</Tooltip>
+                </Marker>
+              );
+            })}
         </MarkerClusterGroup>
       </MapContainer>
     </div>
