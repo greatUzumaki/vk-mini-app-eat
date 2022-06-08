@@ -10,12 +10,19 @@
 /* Стили маркеров */
 @keyframes fade {
   from {
+    top: -5px;
+    opacity: 0;
+  }
+}
+
+@keyframes fade-cluster {
+  from {
     opacity: 0;
   }
 }
 
 .fade {
-  animation: fade 0.5s alternate;
+  animation: fade 0.3s alternate ease-in-out;
 }
 
 .circle {
@@ -26,4 +33,9 @@
   background-color: red;
   border-radius: 100%;
   animation: fade 1s alternate;
+}
+
+.marker-cluster {
+  animation: fade-cluster 0.8s alternate;
+  color: black;
 }

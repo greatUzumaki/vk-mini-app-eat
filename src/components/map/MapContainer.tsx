@@ -28,24 +28,16 @@ const maxBoundsCoords: L.LatLngBoundsExpression = [
   [59.574302, 30.999731],
 ];
 
-const markerIcon = new L.Icon({
-  iconUrl: MarkerIcon,
-  iconSize: [42, 42],
-  iconAnchor: [20, 30],
-  className: 'fade',
-  tooltipAnchor: [20, -10],
-});
-
-const CustomClusterIcon = (cluster: L.MarkerCluster) => {
-  const markers = cluster.getAllChildMarkers();
-  const markersCount = markers.length;
-  const html = '<div class="circle">' + markersCount + '</div>';
-  return L.divIcon({
-    html: html,
-    className: 'mycluster',
-    iconSize: L.point(32, 32),
-  });
-};
+// const CustomClusterIcon = (cluster: L.MarkerCluster) => {
+//   const markers = cluster.getAllChildMarkers();
+//   const markersCount = markers.length;
+//   const html = '<div class="circle">' + markersCount + '</div>';
+//   return L.divIcon({
+//     html: html,
+//     className: 'mycluster',
+//     iconSize: L.point(32, 32),
+//   });
+// };
 
 /**
  * Хэндлер для зума, чтобы скрывать и показывать тултипы в зависимости от уровня зума
@@ -96,6 +88,14 @@ export const Map = () => {
 
   if (hasNextPage) fetchNextPage();
 
+  const markerIcon = new L.Icon({
+    iconUrl: MarkerIcon,
+    iconSize: [42, 42],
+    iconAnchor: [20, 30],
+    className: isFetching || hasNextPage ? 'fade' : '',
+    tooltipAnchor: [20, -10],
+  });
+
   return (
     <div style={{ position: 'relative', zIndex: -1 }}>
       {(isFetching || hasNextPage) && (
@@ -136,7 +136,7 @@ export const Map = () => {
             color: '#222',
             opacity: 0.8,
           }}
-          iconCreateFunction={CustomClusterIcon}
+          // iconCreateFunction={CustomClusterIcon}
         >
           {data &&
             data.pages.map((page) => {
