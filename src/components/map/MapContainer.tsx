@@ -1,3 +1,4 @@
+import { push } from '@cteamdev/router';
 import { useAtomState, useSetAtomState } from '@mntm/precoil';
 import { ScreenSpinner } from '@vkontakte/vkui';
 import L from 'leaflet';
