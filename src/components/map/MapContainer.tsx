@@ -155,8 +155,7 @@ export const Map = () => {
                           zoom: zoomLevel,
                           coords: marker.coord as L.LatLngExpression,
                         });
-                        console.log(query);
-                        // push('/foodinfo');
+                        push('/foodinfo');
                       },
                     }}
                   >
