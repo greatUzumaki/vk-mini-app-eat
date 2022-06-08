@@ -13,7 +13,7 @@ import {
 } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import 'react-leaflet-markercluster/dist/styles.min.css';
-import { useQuery } from 'react-query';
+import { useInfiniteQuery } from 'react-query';
 import { Configuration, DefaultApi } from '../../api';
 import MarkerIcon from '../../assets/icons/marker-icon.png';
 import { setErrorSnackbar } from '../../hooks';
@@ -33,7 +33,7 @@ const markerIcon = new L.Icon({
   iconSize: [42, 42],
   iconAnchor: [20, 30],
   className: 'fade',
-  tooltipAnchor: [20, 0],
+  tooltipAnchor: [20, -10],
 });
 
 const CustomClusterIcon = (cluster: L.MarkerCluster) => {
@@ -65,15 +65,17 @@ function MapEventHandler({
 }
 
 /** Получени данных апишкой Цифрового Петербурга  */
-const fetchMarkers = async () => {
+const fetchMarkers = async ({ pageParam = 1 }) => {
   const API = new DefaultApi(
     new Configuration({ accessToken: import.meta.env.VITE_API_TOKEN })
   );
 
-  let i = 1;
-  const res = await API.datasets143VersionsLatestData570Get(i, 100);
-  i++;
-  return res.data;
+  const res = await API.datasets143VersionsLatestData570Get(pageParam, 100);
+  return {
+    data: res.data.results,
+    nextPage: pageParam + 1,
+    hasNextPage: res.data.next,
+  };
 };
 
 // Основной компонент карты
@@ -83,7 +85,15 @@ export const Map = () => {
 
   const [zoomLevel, setZoomLevel] = useState(5);
 
-  const { data, error, isLoading } = useQuery('getData', fetchMarkers);
+  const { data, error, isLoading, fetchNextPage } = useInfiniteQuery(
+    'getData',
+    fetchMarkers,
+    {
+      getNextPageParam: (lastPage) => {
+        if (lastPage.hasNextPage) return lastPage.nextPage;
+      },
+    }
+  );
 
   if (error) setErrorSnackbar('Ошибка получения данных');
 
@@ -129,28 +139,32 @@ export const Map = () => {
           }}
           iconCreateFunction={CustomClusterIcon}
         >
-          {data?.results &&
-            data.results.map((marker) => {
+          {data &&
+            data.pages.map((page) => {
               return (
-                <Marker
-                  key={marker.oid}
-                  riseOnHover
-                  riseOffset={999}
-                  position={marker.coord as L.LatLngExpression}
-                  icon={markerIcon}
-                  eventHandlers={{
-                    click: () => {
-                      setFoodInfo(marker);
-                      setMapInfo({
-                        zoom: zoomLevel,
-                        coords: marker.coord as L.LatLngExpression,
-                      });
-                      push('/foodinfo');
-                    },
-                  }}
-                >
-                  <Tooltip className='fade'>{marker.name}</Tooltip>
-                </Marker>
+                page.data &&
+                page.data.map((marker) => (
+                  <Marker
+                    key={marker.oid}
+                    riseOnHover
+                    riseOffset={999}
+                    position={marker.coord as L.LatLngExpression}
+                    icon={markerIcon}
+                    eventHandlers={{
+                      click: () => {
+                        setFoodInfo(marker);
+                        setMapInfo({
+                          zoom: zoomLevel,
+                          coords: marker.coord as L.LatLngExpression,
+                        });
+                        fetchNextPage();
+                        // push('/foodinfo');
+                      },
+                    }}
+                  >
+                    <Tooltip className='fade'>{marker.name}</Tooltip>
+                  </Marker>
+                ))
               );
             })}
         </MarkerClusterGroup>
