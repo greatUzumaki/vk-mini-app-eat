@@ -8,7 +8,7 @@
     "build": "cross-env GENERATE_SOURCEMAP=false vite build",
     "predeploy": "npm run build",
     "deploy": "vk-miniapps-deploy",
-    "generate-code": "openapi-generator-cli generate -g typescript-axios -i https://static.petersburg.ru/egs-prod/service_api_version_documentation/d9c3b866-7c0d-4ea6-8d5a-19ef38c6b96d.json -o ./src/api"
+    "generate-code": "openapi-generator-cli generate -g typescript-axios -i https://static.petersburg.ru/egs-prod/service_api_version_documentation/9a60953a-adc0-498f-b9eb-e259cbcce558.json -o ./src/api"
   },
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.5.1",
