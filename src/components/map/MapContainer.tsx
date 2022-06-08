@@ -1,4 +1,3 @@
-import { push } from '@cteamdev/router';
 import { useAtomState, useSetAtomState } from '@mntm/precoil';
 import { ScreenSpinner } from '@vkontakte/vkui';
 import L from 'leaflet';
@@ -64,12 +63,12 @@ function MapEventHandler({
   return null;
 }
 
+const API = new DefaultApi(
+  new Configuration({ accessToken: import.meta.env.VITE_API_TOKEN })
+);
+
 /** Получени данных апишкой Цифрового Петербурга  */
 const fetchMarkers = async ({ pageParam = 1 }) => {
-  const API = new DefaultApi(
-    new Configuration({ accessToken: import.meta.env.VITE_API_TOKEN })
-  );
-
   const res = await API.datasets143VersionsLatestData570Get(pageParam, 100);
   return {
     data: res.data.results,
@@ -78,7 +77,7 @@ const fetchMarkers = async ({ pageParam = 1 }) => {
   };
 };
 
-// Основной компонент карты
+/** Основной компонент карты */
 export const Map = () => {
   const setFoodInfo = useSetAtomState(foodInfo);
   const [map, setMapInfo] = useAtomState(mapInfo);
@@ -86,9 +85,10 @@ export const Map = () => {
   const [zoomLevel, setZoomLevel] = useState(5);
 
   const { data, error, isFetching, fetchNextPage, hasNextPage } =
-    useInfiniteQuery('getData', fetchMarkers, {
+    useInfiniteQuery('getFoodData', fetchMarkers, {
       getNextPageParam: (lastPage) => lastPage.nextPage,
       staleTime: 60 * 1000 * 5, // Данные не устаревают 5 минут (чтобы отключить агрессивную загрузку)
+      cacheTime: 5000,
     });
 
   if (error) setErrorSnackbar('Ошибка получения данных');
@@ -155,7 +155,8 @@ export const Map = () => {
                           zoom: zoomLevel,
                           coords: marker.coord as L.LatLngExpression,
                         });
-                        push('/foodinfo');
+                        console.log(query);
+                        // push('/foodinfo');
                       },
                     }}
                   >

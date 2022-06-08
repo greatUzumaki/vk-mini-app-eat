@@ -1,11 +1,11 @@
+import { init, Router } from '@cteamdev/router';
+import axios from 'axios';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { App } from './App';
-import { init, Router } from '@cteamdev/router';
-import './bridge';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { RetryValue } from 'react-query/types/core/retryer';
-import axios from 'axios';
+import { App } from './App';
+import './bridge';
 
 init();
 
