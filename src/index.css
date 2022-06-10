@@ -1,3 +1,9 @@
+@import '@vkontakte/vkui/dist/fonts.css';
+
+* {
+  font-family: 'VK Sans Display', sans-serif;
+}
+
 /* Стили leaflet */
 .leaflet-control-attribution svg {
   display: none !important;
@@ -38,4 +44,10 @@
 .marker-cluster {
   animation: fade-cluster 0.8s alternate;
   color: black;
+}
+
+/* Кнопки */
+
+.hover_button {
+  background-color: red;
 }
