@@ -1,6 +1,8 @@
 import { back } from '@cteamdev/router';
 import { useAtomValue } from '@mntm/precoil';
 import {
+  Icon20LikeCircleFillRed,
+  Icon24Like,
   Icon24LikeOutline,
   Icon24ShareOutline,
   Icon28FavoriteOutline,
@@ -83,6 +85,8 @@ export const FoodInfo: React.FC<PanelProps> = ({ nav }: PanelProps) => {
   const info = useAtomValue(foodInfo);
 
   const [subscription, setSubscription] = useState(false);
+  const [like, setLike] = useState(false);
+  const [share, setShare] = useState(3);
 
   return (
     <Panel nav={nav}>
@@ -91,7 +95,7 @@ export const FoodInfo: React.FC<PanelProps> = ({ nav }: PanelProps) => {
       </PanelHeader>
       <MainInfo info={info} />
 
-      <Group>
+      <Group mode='plain' separator='show'>
         <Div style={{ paddingBlock: 0 }}>
           <ButtonGroup
             style={{ alignItems: 'center' }}
@@ -100,28 +104,31 @@ export const FoodInfo: React.FC<PanelProps> = ({ nav }: PanelProps) => {
           >
             <ButtonGroup style={{ alignItems: 'center' }} mode='horizontal'>
               <Button
+                onClick={() => setShare((old) => old + 1)}
                 style={{ borderRadius: '15px' }}
-                appearance='neutral'
+                appearance={'neutral'}
                 size='m'
                 hasHover
                 before={<Icon24ShareOutline />}
-                after={3}
+                after={share}
               />
               <Button
+                onClick={() => setLike((old) => !old)}
                 style={{ borderRadius: '15px' }}
-                appearance='neutral'
+                appearance={like ? 'negative' : 'neutral'}
                 size='m'
                 hasHover
-                before={<Icon24LikeOutline />}
-                after={18}
+                before={like ? <Icon24Like /> : <Icon24LikeOutline />}
+                after={like ? 19 : 18}
               />
             </ButtonGroup>
             <Button
               style={{ borderRadius: '15px' }}
               onClick={() => setSubscription((old) => !old)}
               size='m'
-              appearance={subscription ? 'neutral' : 'accent'}
+              appearance={'accent'}
               stretched
+              mode={subscription ? 'secondary' : 'primary'}
               hasHover
             >
               {subscription ? 'Отписаться' : 'Подписаться'}
