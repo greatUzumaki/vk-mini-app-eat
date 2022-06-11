@@ -1,7 +1,6 @@
 import { back } from '@cteamdev/router';
 import { useAtomValue } from '@mntm/precoil';
 import {
-  Icon20MessageOutline,
   Icon24Like,
   Icon24LikeOutline,
   Icon24ShareOutline,
@@ -14,11 +13,12 @@ import {
   Avatar,
   Button,
   ButtonGroup,
+  Card,
+  CardGrid,
   Cell,
   Div,
   Group,
   Header,
-  IconButton,
   Panel,
   PanelHeader,
   PanelHeaderBack,
@@ -27,9 +27,11 @@ import {
   SimpleCell,
   Tabs,
   TabsItem,
+  Text,
 } from '@vkontakte/vkui';
 import { TextTooltip } from '@vkontakte/vkui/dist/cjs/unstable';
 import React, { useState } from 'react';
+import { Rating } from 'react-simple-star-rating';
 import { Result } from '../api';
 import AvatarImg from '../assets/images/avatar.jpg';
 import { foodInfo } from '../store';
@@ -197,12 +199,114 @@ const SubsGroup = () => {
   );
 };
 
+const stocks = [
+  {
+    title: 'Суп на двоих!',
+    text: 'Закажите суп на двоих со скидкой 50%',
+    date: '11.06',
+  },
+  {
+    title: 'Суп на двоих!',
+    text: 'Закажите суп на двоих со скидкой 50%',
+    date: '11.06',
+  },
+  {
+    title: 'Суп на двоих!',
+    text: 'Закажите суп на двоих со скидкой 50%',
+    date: '11.06',
+  },
+];
+
 const StockGroup = () => {
-  return <Group mode='plain'>stock</Group>;
+  return (
+    <Group mode='plain'>
+      <Div>
+        <CardGrid size='l'>
+          {stocks.map((st, index) => {
+            return (
+              <Card key={index} mode='shadow' style={{ marginBottom: 10 }}>
+                <Header
+                  mode='tertiary'
+                  aside={<Text style={{ fontSize: 14 }}>{st.date}</Text>}
+                >
+                  {st.title}
+                </Header>
+                <Div>
+                  <Text>{st.text}</Text>
+                </Div>
+              </Card>
+            );
+          })}
+        </CardGrid>
+      </Div>
+    </Group>
+  );
 };
 
+const reviews = [
+  {
+    userName: 'Евгений Авсиевич',
+    score: 100,
+    desc: 'Всё четко',
+    date: '12.12',
+  },
+  {
+    userName: 'Евгений Авсиевич',
+    score: 76,
+    desc: 'Вкусно',
+    date: '12.12',
+  },
+  {
+    userName: 'Евгений Авсиевич',
+    score: 63,
+    desc: 'Всё четко',
+    date: '12.12',
+  },
+  {
+    userName: 'Евгений Авсиевич',
+    score: 80,
+    desc: 'Всё четко',
+    date: '12.12',
+  },
+  {
+    userName: 'Евгений Авсиевич',
+    score: 30,
+    desc: 'Всё четко',
+    date: '12.12',
+  },
+];
+
 const ReviewGroup = () => {
-  return <Group mode='plain'>rev</Group>;
+  return (
+    <Group mode='plain'>
+      <Div>
+        <CardGrid size='l'>
+          {reviews.map((rev, index) => {
+            return (
+              <Card key={index} mode='shadow' style={{ marginBottom: 10 }}>
+                <SimpleCell
+                  before={<Avatar src={AvatarImg} />}
+                  indicator={rev.date}
+                  description={
+                    <Rating
+                      readonly
+                      size={20}
+                      ratingValue={rev.score} /* Available Props */
+                    />
+                  }
+                >
+                  {rev.userName}
+                </SimpleCell>
+                <Div>
+                  <Text>{rev.desc}</Text>
+                </Div>
+              </Card>
+            );
+          })}
+        </CardGrid>
+      </Div>
+    </Group>
+  );
 };
 
 export const FoodInfo: React.FC<PanelProps> = ({ nav }: PanelProps) => {
