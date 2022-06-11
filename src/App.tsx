@@ -1,19 +1,21 @@
-import React, { useEffect } from 'react';
+import { View } from '@cteamdev/router';
+import { useSetAtomState } from '@mntm/precoil';
+import bridge, { UserInfo } from '@vkontakte/vk-bridge';
 import {
   AdaptivityProvider,
   AppRoot,
   ConfigProvider,
   PlatformType,
 } from '@vkontakte/vkui';
+import '@vkontakte/vkui/dist/fonts.css';
+import '@vkontakte/vkui/dist/unstable.css';
 import '@vkontakte/vkui/dist/vkui.css';
-import { View } from '@cteamdev/router';
-import { FoodInfo, Home, Info, Persik, Profile } from './pages';
+import React, { useEffect } from 'react';
 import { Navigation } from './components/navigation';
-import { getPlatform } from './utils';
-import { useSetAtomState } from '@mntm/precoil';
-import { vkUserAtom } from './store';
-import bridge, { UserInfo } from '@vkontakte/vk-bridge';
 import './index.css';
+import { FoodInfo, Home, Info, Persik, Profile } from './pages';
+import { vkUserAtom } from './store';
+import { getPlatform } from './utils';
 
 export const App: React.FC = () => {
   const platform: PlatformType = getPlatform();

@@ -109,6 +109,7 @@ export const Map = () => {
       )}
 
       <MapContainer
+        zoomControl={false}
         minZoom={12}
         maxBounds={maxBoundsCoords}
         style={{ height: '100vh', width: '100%' }}

@@ -35,7 +35,7 @@
     "@types/react-leaflet-markercluster": "^3.0.0",
     "@vkontakte/icons": "^1.129.0",
     "@vkontakte/vk-bridge": "^2.4.8",
-    "@vkontakte/vkui": "^4.17.0",
+    "@vkontakte/vkui": "^4.32.0",
     "axios": "^0.27.2",
     "eruda": "^2.4.1",
     "eruda-code": "^2.0.0",
